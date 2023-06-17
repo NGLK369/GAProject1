@@ -1,0 +1,103 @@
+body {
+    text-align: center;
+    background-color: #f2f2f2;
+  }
+  
+  h1 {
+    color: #333;
+  }
+  
+  button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+  
+  #game-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  #dealer-container {
+    flex-basis: 20%;
+  }
+  
+  #player-container {
+    flex-basis: 70%;
+  }
+  
+  .player {
+    margin-top: 20px;
+  }
+  
+  .player-name {
+    font-weight: bold;
+  }
+  
+  .player-buttons {
+    margin-top: 10px;
+  }
+  
+  .player {
+    margin-bottom: 20px;
+  }
+  
+  .player-cards {
+    margin-bottom: 10px;
+  }
+  
+  .player-buttons {
+    margin-bottom: 10px;
+  }
+  
+  .chip-btn {
+    margin-right: 5px;
+  }
+  
+  #scoreboard-container {
+    margin-top: 20px;
+  }
+  
+  #scoreboard {
+    border-collapse: collapse;
+    margin: 0 auto;
+  }
+  
+  #scoreboard caption {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  #scoreboard th,
+  #scoreboard td {
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  
+  #scoreboard th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  #scoreboard tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  #reset-stats-btn {
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  
+  #reset-stats-btn:hover {
+    background-color: darkred;
+    cursor: pointer;
+  }
+  
