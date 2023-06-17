@@ -1,39 +1,39 @@
 let playerCount = 0;
 let dealerVisible = false;
 let players = [];
-let dealerStats = {
-  wins: 0,
-  losses: 0,
-  draws: 0
-};
 
 const dealer = {
   cards: []
 };
 
-const joinBtn = document.getElementById('join-btn');
+const joinBtn = document.querySelector('#join-btn');
 joinBtn.addEventListener('click', joinGame);
 
-const resetBtn = document.getElementById('reset-btn');
+const resetBtn = document.querySelector('#reset-btn');
 resetBtn.addEventListener('click', resetGame);
+resetBtn.addEventListener('click', enableJoinButton);
 
-const startBtn = document.getElementById('start-btn');
+const startBtn = document.querySelector('#start-btn');
 startBtn.addEventListener('click', startGame);
 
-const dealerContainer = document.getElementById('dealer-container');
+const dealerContainer = document.querySelector('#dealer-container');
 const hitBtn = dealerContainer.querySelector('.hit-btn');
 const doneBtn = dealerContainer.querySelector('.done-btn');
 
 hitBtn.addEventListener('click', dealerHit);
 doneBtn.addEventListener('click', dealerDone);
 
-const nextGameBtn = document.getElementById('next-game-btn');
+const nextGameBtn = document.querySelector('#next-game-btn');
 nextGameBtn.addEventListener('click', startNextGame);
 nextGameBtn.disabled = true;
 
+function enableJoinButton() {
+  joinBtn.disabled = false;
+}
+
 function joinGame() {
   const playerName = prompt('Enter player name:');
-  if (playerName !== null && playerName.trim() !== '') {
+  if (playerName && playerName.trim() !== '') {
     playerCount++;
     const player = {
       id: playerCount,
@@ -41,16 +41,12 @@ function joinGame() {
       balance: 1000,
       bets: 0,
       stood: false,
-      winLossAmount: 0, // Added property for win/loss amount
-      stats: {
-        wins: 0,
-        losses: 0,
-        draws: 0
-      }
+      stats: { wins: 0, losses: 0, draws: 0 },
+      winLossAmount: 0
     };
     players.push(player);
 
-    const playerContainer = document.getElementById('player-container');
+    const playerContainer = document.querySelector('#player-container');
     const playerDiv = document.createElement('div');
     playerDiv.id = `player-${playerCount}`;
     playerDiv.classList.add('player');
@@ -76,6 +72,10 @@ function joinGame() {
 
     playerContainer.appendChild(playerDiv);
 
+    if (playerCount === 2) {
+      joinBtn.disabled = true;
+    }
+
     if (playerCount === 1) {
       startBtn.removeAttribute('disabled');
     }
@@ -93,7 +93,7 @@ function deductChips(playerId, amount) {
 }
 
 function updateBalanceDisplay(playerId) {
-  const playerBalanceDiv = document.getElementById(`player-${playerId}-balance`);
+  const playerBalanceDiv = document.querySelector(`#player-${playerId}-balance`);
   const player = players.find(player => player.id === playerId);
   if (player) {
     playerBalanceDiv.textContent = `Balance: $${player.balance}`;
@@ -101,7 +101,7 @@ function updateBalanceDisplay(playerId) {
 }
 
 function updateBetsDisplay(playerId) {
-  const playerBetsDiv = document.getElementById(`player-${playerId}-bets`);
+  const playerBetsDiv = document.querySelector(`#player-${playerId}-bets`);
   const player = players.find(player => player.id === playerId);
   if (player) {
     playerBetsDiv.textContent = `BETS: ${player.bets}`;
@@ -111,28 +111,24 @@ function updateBetsDisplay(playerId) {
 function placeBets(playerId) {
   const player = players.find(player => player.id === playerId);
   if (player) {
-    const playerChipsDiv = document.getElementById(`player-${playerId}-chips`);
+    const playerChipsDiv = document.querySelector(`#player-${playerId}-chips`);
     const chipButtons = playerChipsDiv.querySelectorAll('.chip-btn');
     chipButtons.forEach(button => {
       button.disabled = true;
     });
     const placeBetBtn = playerChipsDiv.querySelector('.place-bet-btn');
     placeBetBtn.disabled = true;
-  }
+    player.stood = false;
 
-  // Check if all players have placed their bets
-  const allBetsPlaced = players.every(player => player.bets > 0);
-  if (allBetsPlaced) {
-    // Distribute cards
-    distributeCards();
-
-    // Start the game
-    startGame();
+    const allBetsPlaced = players.every(player => player.bets > 0);
+    if (allBetsPlaced) {
+      distributeCards();
+      startGame();
+    }
   }
 }
 
 function distributeCards() {
-  // Create an array of all possible cards
   const cards = [
     'Ace A', 'Ace 2', 'Ace 3', 'Ace 4', 'Ace 5', 'Ace 6', 'Ace 7', 'Ace 8', 'Ace 9', 'Ace 10', 'Ace Jack', 'Ace Queen', 'Ace King',
     'Spade A', 'Spade 2', 'Spade 3', 'Spade 4', 'Spade 5', 'Spade 6', 'Spade 7', 'Spade 8', 'Spade 9', 'Spade 10', 'Spade Jack', 'Spade Queen', 'Spade King',
@@ -140,16 +136,13 @@ function distributeCards() {
     'Heart A', 'Heart 2', 'Heart 3', 'Heart 4', 'Heart 5', 'Heart 6', 'Heart 7', 'Heart 8', 'Heart 9', 'Heart 10', 'Heart Jack', 'Heart Queen', 'Heart King'
   ];
 
-  // Shuffle the cards
   const shuffledCards = shuffle(cards);
 
-  // Distribute 2 cards to each player and the dealer
   players.forEach(player => {
     player.cards = shuffledCards.splice(0, 2);
   });
   dealer.cards = shuffledCards.splice(0, 2);
 
-  // Update the UI to display the cards
   displayCards();
 }
 
@@ -163,9 +156,8 @@ function shuffle(array) {
 }
 
 function displayCards() {
-  // Display player cards and total
   players.forEach(player => {
-    const playerDiv = document.getElementById(`player-${player.id}`);
+    const playerDiv = document.querySelector(`#player-${player.id}`);
     const cardsDiv = document.createElement('div');
     cardsDiv.classList.add('player-cards');
     const total = calculateCardTotal(player.cards);
@@ -176,8 +168,6 @@ function displayCards() {
     playerDiv.appendChild(cardsDiv);
   });
 
-  // Display dealer cards and total
-  const dealerDiv = document.getElementById('dealer-container');
   const cardsDiv = document.createElement('div');
   cardsDiv.classList.add('dealer-cards');
   const total = calculateCardTotal(dealer.cards);
@@ -185,46 +175,32 @@ function displayCards() {
     <p>Cards: ${dealer.cards.join(', ')}</p>
     <p>Total: ${total}</p>
   `;
-  dealerDiv.appendChild(cardsDiv);
+  dealerContainer.appendChild(cardsDiv);
 }
 
 function resetGame() {
-    const playerContainer = document.getElementById('player-container');
-    while (playerContainer.firstChild) {
-      playerContainer.removeChild(playerContainer.firstChild);
-    }
-    playerCount = 0;
-    dealerVisible = false;
-    dealerContainer.style.display = 'none';
-    startBtn.removeAttribute('disabled');
-    nextGameBtn.disabled = true;
-    players = [];
-    dealer.cards = [];
-  
-    const dealerCardsDiv = dealerContainer.querySelector('.dealer-cards');
-    if (dealerCardsDiv) {
-      dealerCardsDiv.parentNode.removeChild(dealerCardsDiv);
-    }
-  
-    // Clear player stats
-    players.forEach(player => {
-      player.stats.wins = 0;
-      player.stats.losses = 0;
-      player.stats.draws = 0;
-      player.bets = 0;
-    });
-    // Clear dealer stats
-    dealerStats.wins = 0;
-    dealerStats.losses = 0;
-    dealerStats.draws = 0;
-  
-    // Update scoreboard
-    updateScoreboard();
-  
-    // Start a new game
-    startGame();
+  const playerContainer = document.querySelector('#player-container');
+  while (playerContainer.firstChild) {
+    playerContainer.removeChild(playerContainer.firstChild);
   }
-  
+  playerCount = 0;
+  dealerVisible = false;
+  dealerContainer.style.display = 'none';
+  startBtn.removeAttribute('disabled');
+  nextGameBtn.disabled = true;
+  players = [];
+  dealer.cards = [];
+
+  const dealerCardsDiv = dealerContainer.querySelector('.dealer-cards');
+  if (dealerCardsDiv) {
+    dealerCardsDiv.remove();
+  }
+
+  const dealerStatusDiv = dealerContainer.querySelector('.player-status');
+  if (dealerStatusDiv) {
+    dealerStatusDiv.textContent = '';
+  }
+}
 
 function startGame() {
   if (playerCount > 0) {
@@ -250,7 +226,7 @@ function hit(playerId) {
     ];
     const randomCard = cards[Math.floor(Math.random() * cards.length)];
     player.cards.push(randomCard);
-    const playerDiv = document.getElementById(`player-${playerId}`);
+    const playerDiv = document.querySelector(`#player-${playerId}`);
     const cardsDiv = playerDiv.querySelector('.player-cards');
     const total = calculateCardTotal(player.cards);
     cardsDiv.innerHTML = `
@@ -273,22 +249,19 @@ function stand(playerId) {
   const player = players.find(player => player.id === playerId);
   if (player && !player.stood) {
     player.stood = true;
-    const hitBtn = document.getElementById(`player-${playerId}`).querySelector('.hit-btn');
-    const standBtn = document.getElementById(`player-${playerId}`).querySelector('.stand-btn');
+    const hitBtn = document.querySelector(`#player-${playerId} .hit-btn`);
+    const standBtn = document.querySelector(`#player-${playerId} .stand-btn`);
     hitBtn.disabled = true;
     standBtn.disabled = true;
 
-    // Proceed to the next player or dealer's turn
     if (playerId < players.length) {
-      // Move to the next player
       const nextPlayerId = playerId + 1;
-      const nextPlayerDiv = document.getElementById(`player-${nextPlayerId}`);
+      const nextPlayerDiv = document.querySelector(`#player-${nextPlayerId}`);
       const nextPlayerHitBtn = nextPlayerDiv.querySelector('.hit-btn');
       const nextPlayerStandBtn = nextPlayerDiv.querySelector('.stand-btn');
       nextPlayerHitBtn.disabled = false;
       nextPlayerStandBtn.disabled = false;
     } else {
-      // All players have stood, proceed to the dealer's turn
       const dealerHitBtn = dealerContainer.querySelector('.hit-btn');
       dealerHitBtn.disabled = false;
       doneBtn.disabled = false;
@@ -305,8 +278,7 @@ function dealerHit() {
   ];
   const randomCard = cards[Math.floor(Math.random() * cards.length)];
   dealer.cards.push(randomCard);
-  const dealerDiv = document.getElementById('dealer-container');
-  const cardsDiv = dealerDiv.querySelector('.dealer-cards');
+  const cardsDiv = dealerContainer.querySelector('.dealer-cards');
   const total = calculateCardTotal(dealer.cards);
   cardsDiv.innerHTML = `
     <p>Cards: ${dealer.cards.join(', ')}</p>
@@ -331,66 +303,73 @@ function dealerDone() {
   dealerHitBtn.disabled = true;
   dealerDoneBtn.disabled = true;
 
-  // Disable hit and stand buttons for all players
   players.forEach(player => {
-    const playerDiv = document.getElementById(`player-${player.id}`);
+    const playerDiv = document.querySelector(`#player-${player.id}`);
     const hitBtn = playerDiv.querySelector('.hit-btn');
     const standBtn = playerDiv.querySelector('.stand-btn');
     hitBtn.disabled = true;
     standBtn.disabled = true;
   });
 
-  // Determine the results
   determineResults();
   updateScoreboard();
-
-  // Enable next game button
   nextGameBtn.disabled = false;
 }
 
 function determineResults() {
-    const dealerTotal = calculateCardTotal(dealer.cards);
-  
-    players.forEach(player => {
-      const playerDiv = document.getElementById(`player-${player.id}`);
-      const playerTotal = calculateCardTotal(player.cards);
-      let result;
-  
-      if (playerTotal > 21 || (dealerTotal <= 21 && dealerTotal > playerTotal)) {
-        result = 'Lose';
-        player.stats.losses++;
-        // Deduct the bet amount from the player's balance if they lose
-        player.balance -= player.bets;
-      } else if (playerTotal === dealerTotal) {
-        result = 'Draw';
-        player.stats.draws++;
-        // Return the bet amount to the player's balance in case of a draw
-        player.balance += player.bets;
-      } else {
-        result = 'Win';
-        player.stats.wins++;
-        // Double the bet amount and add it to the player's balance in case of a win
-        player.balance += player.bets * 2;
-      }
-  
-      displayPlayerStatus(player.id, result);
-      updateBalanceDisplay(player.id); // Update the displayed balance
-    });
-  
-    const dealerResult = getDealerResult(dealerTotal);
-    displayPlayerStatus('dealer-container', dealerResult);
-  
-    if (dealerResult === 'Win') {
-      dealerStats.wins++;
-    } else if (dealerResult === 'Lose') {
-      dealerStats.losses++;
-    } else if (dealerResult === 'Draw') {
-      dealerStats.draws++;
+  const dealerTotal = calculateCardTotal(dealer.cards);
+
+  players.forEach(player => {
+    const playerDiv = document.querySelector(`#player-${player.id}`);
+    const playerTotal = calculateCardTotal(player.cards);
+    let result;
+
+    if (playerTotal > 21 || (dealerTotal <= 21 && dealerTotal > playerTotal)) {
+      result = 'Lose';
+      player.stats.losses++;
+      player.balance -= player.bets;
+      player.winLossAmount -= player.bets;
+    } else if (playerTotal === dealerTotal) {
+      result = 'Draw';
+      player.stats.draws++;
+      player.balance += player.bets;
+    } else {
+      result = 'Win';
+      player.stats.wins++;
+      player.balance += player.bets * 2;
+      player.winLossAmount += player.bets;
     }
-  
-    updateBalanceDisplay('dealer-container'); // Update the displayed balance for the dealer
+
+    displayPlayerStatus(player.id, result);
+    updateBalanceDisplay(player.id);
+  });
+
+  const dealerResult = getDealerResult(dealerTotal);
+  displayPlayerStatus('dealer-container', dealerResult);
+
+  if (dealerResult === 'Win') {
+    dealerStats.wins++;
+  } else if (dealerResult === 'Lose') {
+    dealerStats.losses++;
+  } else if (dealerResult === 'Draw') {
+    dealerStats.draws++;
   }
-  
+
+  updateBalanceDisplay('dealer-container');
+  updateScoreboard();
+}
+
+function updateScoreboard() {
+  document.getElementById('dealer-wins').textContent = dealerStats.wins;
+  document.getElementById('dealer-losses').textContent = dealerStats.losses;
+  document.getElementById('dealer-draws').textContent = dealerStats.draws;
+
+  players.forEach((player, index) => {
+    document.getElementById(`player${index + 1}-wins`).textContent = player.stats.wins;
+    document.getElementById(`player${index + 1}-losses`).textContent = player.stats.losses;
+    document.getElementById(`player${index + 1}-draws`).textContent = player.stats.draws;
+  });
+}
 
 function getDealerResult(total) {
   if (total > 21) {
@@ -403,7 +382,7 @@ function getDealerResult(total) {
 }
 
 function displayPlayerStatus(playerId, status) {
-  const playerStatusDiv = document.getElementById(`player-${playerId}-status`);
+  const playerStatusDiv = document.querySelector(`#player-${playerId}-status`);
   if (playerStatusDiv) {
     if (playerId === 'dealer-container') {
       playerStatusDiv.textContent = `Dealer: ${status}`;
