@@ -100,4 +100,7 @@ body {
     background-color: darkred;
     cursor: pointer;
   }
-  
+  .player-cards,
+.dealer-cards {
+  display: none;
+}
