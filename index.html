@@ -6,19 +6,28 @@
 </head>
 <body>
   <h1>Blackjack 21</h1>
-  
+
+  <!-- Start Game button (disabled by default) -->
   <button id="start-btn" disabled>Start Game</button>
+
+  <!-- Reset Game button -->
   <button id="reset-btn">Reset Game</button>
+
+  <!-- Join Game button -->
   <button id="join-btn">Join Game</button>
 
   <div id="game-container">
+    <!-- Dealer container -->
     <div id="dealer-container" style="display: none;">
       <h2>Dealer</h2>
+
+      <!-- Buttons for the dealer -->
       <div class="player-buttons">
         <button class="hit-btn">Hit</button>
         <button class="done-btn">Done</button>
       </div>
-      <div class="dealer-cards"></div> <!-- Added: Element to display dealer's cards -->
+
+      <div class="dealer-cards"></div> <!-- Element to display dealer's cards -->
     </div>
 
     <div id="player-container">

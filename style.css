@@ -1,3 +1,4 @@
+/* Set the background image and styles */
 body {
   text-align: center;
   background-image: url('https://media.istockphoto.com/id/1092139474/photo/empty-green-casino-poker-table-cloth-with-spotlight.jpg?s=612x612&w=0&k=20&c=0TwjfTAxxMdBPKBnnrhRDmsvYS7ui3Ly_u9HZms8QAc=');
@@ -7,100 +8,83 @@ body {
   background-color: #f2f2f2;
 }
 
+/* Style the "Blackjack 21" heading to white color */
 h1 {
   color: white;
 }
 
+/* Style for general buttons */
 button {
   margin: 10px;
   padding: 10px 20px;
   font-size: 16px;
 }
 
+/* Flex container for game elements */
 #game-container {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
 }
 
+/* Dealer container width */
 #dealer-container {
   flex-basis: 20%;
 }
 
+/* Player container width */
 #player-container {
   flex-basis: 70%;
 }
 
+/* Styling for player elements */
 .player {
   margin-top: 20px;
   color: white;
 }
 
+/* Styling for player and dealer cards */
 .player-cards,
 .dealer-cards {
   color: white;
 }
 
+/* Styling for dealer heading */
 #dealer-container h2 {
   color: white;
 }
 
+/* Styling for player name */
 .player-name {
   font-weight: bold;
 }
 
+/* Styling for player buttons */
 .player-buttons {
   margin-top: 10px;
 }
 
+/* Styling for player elements */
 .player {
   margin-bottom: 20px;
 }
 
+/* Styling for player cards */
 .player-cards {
   margin-bottom: 10px;
 }
 
+/* Styling for player buttons */
 .player-buttons {
   margin-bottom: 10px;
 }
 
+/* Styling for chip buttons */
 .chip-btn {
   margin-right: 5px;
 }
 
-#scoreboard-container {
-  margin-top: 20px;
-}
-
-#scoreboard {
-  border-collapse: collapse;
-  margin: 0 auto;
-}
-
-#scoreboard caption {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: white !important;
-}
-
-#scoreboard th,
-#scoreboard td {
-  padding: 10px;
-  border: 1px solid #ccc;
-}
-
-#scoreboard th {
-  background-color: #f2f2f2;
-  font-weight: bold;
-  text-align: center;
-}
-
-#scoreboard tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
+/* Styling for reset stats button */
 #reset-stats-btn {
   background-color: red;
   color: white;
@@ -111,11 +95,13 @@ button {
   margin-top: 10px;
 }
 
+/* Styling for hover effect on reset stats button */
 #reset-stats-btn:hover {
   background-color: darkred;
   cursor: pointer;
 }
 
+/* Hide player and dealer cards initially */
 .player-cards,
 .dealer-cards {
   display: none;
