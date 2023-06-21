@@ -1,5 +1,5 @@
 body {
-  background-image: url('https://media.istockphoto.com/id/1092139474/photo/empty-green-casino-poker-table-cloth-with-spotlight.jpg?s=612x612&w=0&k=20&c=0TwjfTAxxMdBPKBnnrhRDmsvYS7ui3Ly_u9HZms8QAc=');
+  background-image: url('https://us.123rf.com/450wm/ivo13/ivo131712/ivo13171200224/92570597-abstract-green-felt-background-green-velvet-background.jpg?ver=6');
   background-repeat: no-repeat;
   background-size: cover;
   color: white;
@@ -135,3 +135,12 @@ h1 {
   text-align: center;
   font-size: 56px; /* Adjust the font size as desired */
 }
+
+h1 span.black {
+  color: black;
+}
+
+h1 span.red {
+  color: red;
+}
+
