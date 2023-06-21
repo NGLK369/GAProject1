@@ -4,59 +4,67 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-  <div id="table">
-    <h1>Blackjack 21</h1>
-    <div id="scoreboard">
-      <h2>Scoreboard</h2>
-      <table>
-        <tr>
-          <th></th>
-          <th>Wins</th>
-          <th>Losses</th>
-          <th>Draws</th>
-        </tr>
-        <tr>
-          <td>Dealer</td>
-          <td id="dealerWins">0</td>
-          <td id="dealerLosses">0</td>
-          <td id="dealerDraws">0</td>
-        </tr>
-        <tr>
-          <td>Player 1</td>
-          <td id="player1Wins">0</td>
-          <td id="player1Losses">0</td>
-          <td id="player1Draws">0</td>
-        </tr>
-        <tr>
-          <td>Player 2</td>
-          <td id="player2Wins">0</td>
-          <td id="player2Losses">0</td>
-          <td id="player2Draws">0</td>
-        </tr>
-      </table>
+  <div class="container">
+    <div id="titleContainer">
+      <h1>Blackjack 21</h1>
     </div>
-    <div id="dealer">
-      <h2>Dealer (<span id="dealerTotal">Total: </span>)</h2>
-      <h3>Status: <span id="dealerStatus"></span></h3>
-      <button id="dealBtn">Deal</button>
-      <button id="hitBtn">Hit</button>
-      <button id="nextBtn">Next Game</button>
-      <button id="dealerStandBtn">Stand</button>
-      <div id="dealerCards"></div>
-    </div>
-    <div id="player1">
-      <h2>Player 1 (<span id="player1Total">Total: </span>)</h2>
-      <h3>Status: <span id="player1Status"></span></h3>
-      <button id="p1HitBtn">Hit</button>
-      <button id="p1StandBtn">Stand</button>
-      <div id="player1Cards"></div>
-    </div>
-    <div id="player2">
-      <h2>Player 2 (<span id="player2Total">Total: </span>)</h2>
-      <h3>Status: <span id="player2Status"></span></h3>
-      <button id="p2HitBtn">Hit</button>
-      <button id="p2StandBtn">Stand</button>
-      <div id="player2Cards"></div>
+    <div id="gameContainer">
+      <div id="scoreboardContainer">
+        <table id="scoreboard">
+          <tr>
+            <th colspan="3">
+              <span>Scoreboard</span>
+            </th>
+          </tr>
+          <tr>
+            <th>Wins</th>
+            <th>Losses</th>
+            <th>Draws</th>
+          </tr>
+          <tr>
+            <td id="dealerWins">0</td>
+            <td id="dealerLosses">0</td>
+            <td id="dealerDraws">0</td>
+          </tr>
+          <tr>
+            <td id="player1Wins">0</td>
+            <td id="player1Losses">0</td>
+            <td id="player1Draws">0</td>
+          </tr>
+          <tr>
+            <td id="player2Wins">0</td>
+            <td id="player2Losses">0</td>
+            <td id="player2Draws">0</td>
+          </tr>
+        </table>
+      </div>
+      <div id="dealerContainer">
+        <div id="dealer">
+          <h2>Dealer (<span id="dealerTotal">Total: </span>)</h2>
+          <h3>Status: <span id="dealerStatus"></span></h3>
+          <button id="dealBtn">Deal</button>
+          <button id="hitBtn">Hit</button>
+          <button id="nextBtn">Next Game</button>
+          <button id="dealerStandBtn">Stand</button>
+          <div id="dealerCards"></div>
+        </div>
+      </div>
+      <div id="playerContainer">
+        <div id="player1">
+          <h2>Player 1 (<span id="player1Total">Total: </span>)</h2>
+          <h3>Status: <span id="player1Status"></span></h3>
+          <button id="p1HitBtn">Hit</button>
+          <button id="p1StandBtn">Stand</button>
+          <div id="player1Cards"></div>
+        </div>
+        <div id="player2">
+          <h2>Player 2 (<span id="player2Total">Total: </span>)</h2>
+          <h3>Status: <span id="player2Status"></span></h3>
+          <button id="p2HitBtn">Hit</button>
+          <button id="p2StandBtn">Stand</button>
+          <div id="player2Cards"></div>
+        </div>
+      </div>
     </div>
   </div>
 

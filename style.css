@@ -35,22 +35,41 @@ body {
   width: 30%;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-end;
+  font-size: 24px; /* Adjust the font size as desired */
 }
 
-#dealerContainer,
-#playerContainer {
-  width: 70%;
+
+#dealerContainer {
+  width: 20%;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
+  justify-content: center;
+  font-size: 24px; /* Adjust the font size as desired */
 }
+
+#playerContainer {
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  font-size: 24px; /* Adjust the font size as desired */
+}
+
+/* Rest of the CSS code... */
 
 button {
   margin: 10px;
   color: white;
   background-color: darkgreen;
 }
+
+button:disabled {
+  background-color: grey;
+}
+
 
 #scoreboard table {
   width: 100%;
@@ -67,17 +86,17 @@ button {
 
 #scoreboard th:first-child,
 #scoreboard td:first-child {
-  width: 25%;
+  width: auto;
 }
 
 #scoreboard th:nth-child(2),
 #scoreboard td:nth-child(2) {
-  width: 20%;
+  width: auto;
 }
 
 #scoreboard th:nth-child(3),
 #scoreboard td:nth-child(3) {
-  width: 22%;
+  width: auto;
 }
 
 #scoreboard th {
@@ -91,10 +110,6 @@ button {
   vertical-align: middle;
 }
 
-#scoreboard th[colspan="3"] {
-  text-align: center;
-}
-
 #scoreboard tr:nth-child(even) {
   background-color: transparent;
 }
@@ -105,4 +120,18 @@ button {
 
 #nextBtn {
   background-color: darkgreen;
+}
+
+#table {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 56px; /* Adjust the font size as desired */
 }
