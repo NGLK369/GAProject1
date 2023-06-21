@@ -6,6 +6,35 @@
 <body>
   <div id="table">
     <h1>Blackjack 21</h1>
+    <div id="scoreboard">
+      <h2>Scoreboard</h2>
+      <table>
+        <tr>
+          <th></th>
+          <th>Wins</th>
+          <th>Losses</th>
+          <th>Draws</th>
+        </tr>
+        <tr>
+          <td>Dealer</td>
+          <td id="dealerWins">0</td>
+          <td id="dealerLosses">0</td>
+          <td id="dealerDraws">0</td>
+        </tr>
+        <tr>
+          <td>Player 1</td>
+          <td id="player1Wins">0</td>
+          <td id="player1Losses">0</td>
+          <td id="player1Draws">0</td>
+        </tr>
+        <tr>
+          <td>Player 2</td>
+          <td id="player2Wins">0</td>
+          <td id="player2Losses">0</td>
+          <td id="player2Draws">0</td>
+        </tr>
+      </table>
+    </div>
     <div id="dealer">
       <h2>Dealer (<span id="dealerTotal">Total: </span>)</h2>
       <h3>Status: <span id="dealerStatus"></span></h3>

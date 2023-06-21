@@ -21,6 +21,17 @@ let player1Stood = false;
 let player2Stood = false;
 let dealerStood = false;
 
+// Scoreboard
+let dealerWins = 0;
+let dealerLosses = 0;
+let dealerDraws = 0;
+let player1Wins = 0;
+let player1Losses = 0;
+let player1Draws = 0;
+let player2Wins = 0;
+let player2Losses = 0;
+let player2Draws = 0;
+
 // Button elements
 const dealBtn = document.querySelector('#dealBtn');
 const hitBtn = document.querySelector('#hitBtn');
@@ -41,6 +52,9 @@ const player2TotalElement = document.querySelector('#player2Total');
 const player1StatusElement = document.querySelector('#player1Status');
 const player2StatusElement = document.querySelector('#player2Status');
 const dealerStatusElement = document.querySelector('#dealerStatus');
+const winsElement = document.querySelector('#wins');
+const lossesElement = document.querySelector('#losses');
+const drawsElement = document.querySelector('#draws');
 
 // Disable/Enable buttons
 function disableButtons() {
@@ -133,44 +147,68 @@ function isBust(hand) {
   return calculateHandValue(hand) > 21;
 }
 
-// Check the status of the game
-function checkStatus() {
-  const dealerTotal = calculateTotal(dealerHand);
-  const player1Total = calculateTotal(player1Hand);
-  const player2Total = calculateTotal(player2Hand);
+// Check if all players and dealer have clicked the Stand button
+function isAllStandClicked() {
+  return player1Stood && player2Stood && dealerStood;
+}
 
-  // Player 1 status
-  if (player1Total > 21) {
-    player1StatusElement.textContent = 'Lose';
-  } else if (player1Total === dealerTotal) {
-    player1StatusElement.textContent = 'Draw';
-  } else if (player1Total > dealerTotal || dealerTotal > 21) {
+// Determine the win, lose, or draw status
+function determineStatus() {
+  const dealerTotal = calculateHandValue(dealerHand);
+  const player1Total = calculateHandValue(player1Hand);
+  const player2Total = calculateHandValue(player2Hand);
+
+  if (isBust(dealerHand)) {
     player1StatusElement.textContent = 'Win';
+    player2StatusElement.textContent = 'Win';
+    dealerStatusElement.textContent = 'Bust';
+    dealerLosses++;
+  } else if (isBust(player1Hand) && isBust(player2Hand)) {
+    dealerStatusElement.textContent = 'Win';
+    dealerWins++;
+  } else if (player1Total === dealerTotal && player2Total === dealerTotal) {
+    player1StatusElement.textContent = 'Draw';
+    player2StatusElement.textContent = 'Draw';
+    dealerStatusElement.textContent = 'Draw';
+    dealerDraws++;
+  } else if (player1Total > dealerTotal && player1Total <= 21) {
+    player1StatusElement.textContent = 'Win';
+    dealerStatusElement.textContent = 'Lose';
+    player1Wins++;
+    dealerLosses++;
+  } else if (player2Total > dealerTotal && player2Total <= 21) {
+    player2StatusElement.textContent = 'Win';
+    dealerStatusElement.textContent = 'Lose';
+    player2Wins++;
+    dealerLosses++;
+  } else if (dealerTotal > 21) {
+    player1StatusElement.textContent = 'Win';
+    player2StatusElement.textContent = 'Win';
+    dealerStatusElement.textContent = 'Bust';
+    dealerLosses++;
   } else {
     player1StatusElement.textContent = 'Lose';
-  }
-
-  // Player 2 status
-  if (player2Total > 21) {
     player2StatusElement.textContent = 'Lose';
-  } else if (player2Total === dealerTotal) {
-    player2StatusElement.textContent = 'Draw';
-  } else if (player2Total > dealerTotal || dealerTotal > 21) {
-    player2StatusElement.textContent = 'Win';
-  } else {
-    player2StatusElement.textContent = 'Lose';
-  }
-
-  // Dealer status
-  if (dealerTotal > 21) {
-    dealerStatusElement.textContent = 'Lose';
-  } else if ((player1Total > dealerTotal && player1Total <= 21) || (player2Total > dealerTotal && player2Total <= 21)) {
-    dealerStatusElement.textContent = 'Lose';
-  } else if (player1Total === dealerTotal && player2Total === dealerTotal) {
-    dealerStatusElement.textContent = 'Draw';
-  } else {
     dealerStatusElement.textContent = 'Win';
+    dealerWins++;
+    player1Losses++;
+    player2Losses++;
   }
+
+  updateScoreboard();
+}
+
+// Update scoreboard
+function updateScoreboard() {
+  document.querySelector('#dealerWins').textContent = dealerWins;
+  document.querySelector('#dealerLosses').textContent = dealerLosses;
+  document.querySelector('#dealerDraws').textContent = dealerDraws;
+  document.querySelector('#player1Wins').textContent = player1Wins;
+  document.querySelector('#player1Losses').textContent = player1Losses;
+  document.querySelector('#player1Draws').textContent = player1Draws;
+  document.querySelector('#player2Wins').textContent = player2Wins;
+  document.querySelector('#player2Losses').textContent = player2Losses;
+  document.querySelector('#player2Draws').textContent = player2Draws;
 }
 
 // Deal initial cards
@@ -195,6 +233,14 @@ function dealInitialCards() {
 
   updateUI();
   displayTotal();
+}
+
+// Check the status of the game
+function checkStatus() {
+  if (isAllStandClicked()) {
+    determineStatus();
+    disableButtons();
+  }
 }
 
 // Handle Hit button click for Player 1
@@ -245,10 +291,6 @@ function player1Stand() {
   p1StandBtn.disabled = true;
   player1Stood = true;
   checkStatus();
-
-  if (player2Stood && dealerStood) {
-    disableButtons();
-  }
 }
 
 // Handle Stand button click for Player 2
@@ -257,10 +299,6 @@ function player2Stand() {
   p2StandBtn.disabled = true;
   player2Stood = true;
   checkStatus();
-
-  if (player1Stood && dealerStood) {
-    disableButtons();
-  }
 }
 
 // Handle Stand button click for Dealer
@@ -269,10 +307,6 @@ function dealerStand() {
   hitBtn.disabled = true;
   dealerStood = true;
   checkStatus();
-
-  if (player1Stood && player2Stood) {
-    disableButtons();
-  }
 }
 
 // Handle Next Game button click

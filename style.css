@@ -2,24 +2,107 @@ body {
   background-image: url('https://media.istockphoto.com/id/1092139474/photo/empty-green-casino-poker-table-cloth-with-spotlight.jpg?s=612x612&w=0&k=20&c=0TwjfTAxxMdBPKBnnrhRDmsvYS7ui3Ly_u9HZms8QAc=');
   background-repeat: no-repeat;
   background-size: cover;
+  color: white;
 }
 
-#table {
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  color: white;
+  padding: 20px;
+}
+
+#titleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 30vh;
+}
+
+#gameContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 70vh;
+  width: 100%;
+}
+
+#scoreboardContainer {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#dealerContainer,
+#playerContainer {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 button {
   margin: 10px;
+  color: white;
+  background-color: darkgreen;
 }
-#dealer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
+#scoreboard table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 2px solid white;
+}
+
+#scoreboard th,
+#scoreboard td {
+  padding: 5px;
   text-align: center;
-  margin-bottom: 20px;
+  border: 1px solid white;
+}
+
+#scoreboard th:first-child,
+#scoreboard td:first-child {
+  width: 25%;
+}
+
+#scoreboard th:nth-child(2),
+#scoreboard td:nth-child(2) {
+  width: 20%;
+}
+
+#scoreboard th:nth-child(3),
+#scoreboard td:nth-child(3) {
+  width: 22%;
+}
+
+#scoreboard th {
+  background-color: transparent;
+  color: white;
+  text-align: center;
+}
+
+#scoreboard th span {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#scoreboard th[colspan="3"] {
+  text-align: center;
+}
+
+#scoreboard tr:nth-child(even) {
+  background-color: transparent;
+}
+
+#scoreboard tr:hover {
+  background-color: transparent;
+}
+
+#nextBtn {
+  background-color: darkgreen;
 }
