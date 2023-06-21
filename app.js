@@ -114,9 +114,30 @@ function calculateHandValue(hand) {
 
 // Update UI with card values
 function updateUI() {
-  dealerCardsElement.textContent = dealerHand.join(', ');
-  player1CardsElement.textContent = player1Hand.join(', ');
-  player2CardsElement.textContent = player2Hand.join(', ');
+  dealerCardsElement.textContent = formatCards(dealerHand);
+  player1CardsElement.textContent = formatCards(player1Hand);
+  player2CardsElement.textContent = formatCards(player2Hand);
+}
+
+// Format cards with indicators
+function formatCards(hand) {
+  let formattedCards = '';
+
+  for (let i = 0; i < hand.length; i++) {
+    const card = hand[i];
+
+    if (hand === dealerHand && !dealerStood) {
+      formattedCards += '?';
+    } else if (hand === player1Hand) {
+      formattedCards += 'P1: ';
+    } else if (hand === player2Hand) {
+      formattedCards += 'P2: ';
+    }
+
+    formattedCards += card + ', ';
+  }
+
+  return formattedCards.slice(0, -2); // Remove trailing comma and space
 }
 
 // Calculate total value of a hand
