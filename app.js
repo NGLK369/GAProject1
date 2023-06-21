@@ -17,9 +17,9 @@ let deck = [];
 let dealerHand = [];
 let player1Hand = [];
 let player2Hand = [];
-let player1Status = '';
-let player2Status = '';
-let dealerStatus = '';
+let player1Stood = false;
+let player2Stood = false;
+let dealerStood = false;
 
 // Button elements
 const dealBtn = document.querySelector('#dealBtn');
@@ -123,15 +123,65 @@ function displayTotal() {
   player2TotalElement.textContent = calculateTotal(player2Hand);
 }
 
+// Check for a blackjack
+function checkBlackjack(hand) {
+  return hand.length === 2 && calculateHandValue(hand) === 21;
+}
+
+// Check if hand busts
+function isBust(hand) {
+  return calculateHandValue(hand) > 21;
+}
+
+// Check the status of the game
+function checkStatus() {
+  const dealerTotal = calculateTotal(dealerHand);
+  const player1Total = calculateTotal(player1Hand);
+  const player2Total = calculateTotal(player2Hand);
+
+  // Player 1 status
+  if (player1Total > 21) {
+    player1StatusElement.textContent = 'Lose';
+  } else if (player1Total === dealerTotal) {
+    player1StatusElement.textContent = 'Draw';
+  } else if (player1Total > dealerTotal || dealerTotal > 21) {
+    player1StatusElement.textContent = 'Win';
+  } else {
+    player1StatusElement.textContent = 'Lose';
+  }
+
+  // Player 2 status
+  if (player2Total > 21) {
+    player2StatusElement.textContent = 'Lose';
+  } else if (player2Total === dealerTotal) {
+    player2StatusElement.textContent = 'Draw';
+  } else if (player2Total > dealerTotal || dealerTotal > 21) {
+    player2StatusElement.textContent = 'Win';
+  } else {
+    player2StatusElement.textContent = 'Lose';
+  }
+
+  // Dealer status
+  if (dealerTotal > 21) {
+    dealerStatusElement.textContent = 'Lose';
+  } else if ((player1Total > dealerTotal && player1Total <= 21) || (player2Total > dealerTotal && player2Total <= 21)) {
+    dealerStatusElement.textContent = 'Lose';
+  } else if (player1Total === dealerTotal && player2Total === dealerTotal) {
+    dealerStatusElement.textContent = 'Draw';
+  } else {
+    dealerStatusElement.textContent = 'Win';
+  }
+}
+
 // Deal initial cards
 function dealInitialCards() {
   // Clear existing hands
   dealerHand = [];
   player1Hand = [];
   player2Hand = [];
-  player1Status = '';
-  player2Status = '';
-  dealerStatus = '';
+  player1Stood = false;
+  player2Stood = false;
+  dealerStood = false;
 
   // Deal 2 cards to each player and dealer
   for (let i = 0; i < 2; i++) {
@@ -147,69 +197,14 @@ function dealInitialCards() {
   displayTotal();
 }
 
-// Check for a blackjack
-function checkBlackjack(hand) {
-  return hand.length === 2 && calculateHandValue(hand) === 21;
-}
-
-// Check if hand busts
-function isBust(hand) {
-  return calculateHandValue(hand) > 21;
-}
-
-// Check if all players and dealer have clicked the Stand button
-function isAllStandClicked() {
-  return (
-    p1StandBtn.disabled &&
-    p2StandBtn.disabled &&
-    dealerStandBtn.disabled
-  );
-}
-
-// Determine the win, lose, or draw status
-function determineStatus() {
-  const dealerTotal = calculateHandValue(dealerHand);
-  const player1Total = calculateHandValue(player1Hand);
-  const player2Total = calculateHandValue(player2Hand);
-
-  if (isBust(dealerHand)) {
-    player1Status = 'Win';
-    player2Status = 'Win';
-    dealerStatus = 'Bust';
-  } else if (isBust(player1Hand) && isBust(player2Hand)) {
-    dealerStatus = 'Win';
-  } else if (player1Total === dealerTotal && player2Total === dealerTotal) {
-    player1Status = 'Draw';
-    player2Status = 'Draw';
-    dealerStatus = 'Draw';
-  } else if (player1Total > dealerTotal && player1Total <= 21) {
-    player1Status = 'Win';
-    dealerStatus = 'Lose';
-  } else if (player2Total > dealerTotal && player2Total <= 21) {
-    player2Status = 'Win';
-    dealerStatus = 'Lose';
-  } else if (dealerTotal > 21) {
-    player1Status = 'Win';
-    player2Status = 'Win';
-    dealerStatus = 'Bust';
-  } else {
-    player1Status = 'Lose';
-    player2Status = 'Lose';
-    dealerStatus = 'Win';
-  }
-
-  player1StatusElement.textContent = player1Status;
-  player2StatusElement.textContent = player2Status;
-  dealerStatusElement.textContent = dealerStatus;
-}
-
 // Handle Hit button click for Player 1
 function player1Hit() {
   const card = dealCard(player1Hand);
 
   if (isBust(player1Hand)) {
     disableButtons();
-    // Handle player1 bust
+    player1Stood = true;
+    checkStatus();
   }
 
   updateUI();
@@ -222,7 +217,8 @@ function player2Hit() {
 
   if (isBust(player2Hand)) {
     disableButtons();
-    // Handle player2 bust
+    player2Stood = true;
+    checkStatus();
   }
 
   updateUI();
@@ -235,7 +231,8 @@ function dealerHit() {
 
   if (isBust(dealerHand)) {
     disableButtons();
-    // Handle dealer bust
+    dealerStood = true;
+    checkStatus();
   }
 
   updateUI();
@@ -246,9 +243,11 @@ function dealerHit() {
 function player1Stand() {
   p1HitBtn.disabled = true;
   p1StandBtn.disabled = true;
+  player1Stood = true;
+  checkStatus();
 
-  if (isAllStandClicked()) {
-    determineStatus();
+  if (player2Stood && dealerStood) {
+    disableButtons();
   }
 }
 
@@ -256,9 +255,11 @@ function player1Stand() {
 function player2Stand() {
   p2HitBtn.disabled = true;
   p2StandBtn.disabled = true;
+  player2Stood = true;
+  checkStatus();
 
-  if (isAllStandClicked()) {
-    determineStatus();
+  if (player1Stood && dealerStood) {
+    disableButtons();
   }
 }
 
@@ -266,9 +267,11 @@ function player2Stand() {
 function dealerStand() {
   dealerStandBtn.disabled = true;
   hitBtn.disabled = true;
+  dealerStood = true;
+  checkStatus();
 
-  if (isAllStandClicked()) {
-    determineStatus();
+  if (player1Stood && player2Stood) {
+    disableButtons();
   }
 }
 
@@ -278,15 +281,19 @@ function nextGame() {
   dealerHand = [];
   player1Hand = [];
   player2Hand = [];
-  player1Status = '';
-  player2Status = '';
-  dealerStatus = '';
+  player1Stood = false;
+  player2Stood = false;
+  dealerStood = false;
 
   enableDealButton();
 
   updateUI();
   displayTotal();
+  resetStatus();
+}
 
+// Reset the status display
+function resetStatus() {
   player1StatusElement.textContent = '';
   player2StatusElement.textContent = '';
   dealerStatusElement.textContent = '';
