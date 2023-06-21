@@ -1,40 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>GA Project 1 NLK - Blackjack 21</title>
-  <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-  <h1>Blackjack 21</h1>
-
-  <!-- Start Game button (disabled by default) -->
-  <button id="start-btn" disabled>Start Game</button>
-
-  <!-- Reset Game button -->
-  <button id="reset-btn">Reset Game</button>
-
-  <!-- Join Game button -->
-  <button id="join-btn">Join Game</button>
-
-  <div id="game-container">
-    <!-- Dealer container -->
-    <div id="dealer-container" style="display: none;">
-      <h2>Dealer</h2>
-
-      <!-- Buttons for the dealer -->
-      <div class="player-buttons">
-        <button class="hit-btn">Hit</button>
-        <button class="done-btn">Done</button>
-      </div>
-
-      <div class="dealer-cards"></div> <!-- Element to display dealer's cards -->
+  <div id="table">
+    <h1>Blackjack 21</h1>
+    <div id="dealer">
+      <h2>Dealer (<span id="dealerTotal">Total: </span>)</h2> <!-- Added dealer total display -->
+      <button id="dealBtn">Deal</button>
+      <button id="hitBtn">Hit</button>
+      <button id="nextBtn">Next Game</button>
+      <button id="dealerStandBtn">Stand</button> <!-- Added dealer Stand button -->
+      <div id="dealerCards"></div>
     </div>
-
-    <div id="player-container">
-      <!-- Player containers will be dynamically added using JavaScript -->
+    <div id="player1">
+      <h2>Player 1 (<span id="player1Total">Total: </span>)</h2> <!-- Added player1 total display -->
+      <button id="p1HitBtn">Hit</button>
+      <button id="p1StandBtn">Stand</button>
+      <div id="player1Cards"></div>
     </div>
+    <div id="player2">
+      <h2>Player 2 (<span id="player2Total">Total: </span>)</h2> <!-- Added player2 total display -->
+      <button id="p2HitBtn">Hit</button>
+      <button id="p2StandBtn">Stand</button>
+      <div id="player2Cards"></div>
+    </div>
+    <div id="gameStatus"></div> <!-- Added game status element -->
   </div>
+  
 
-  <script src="app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
