@@ -171,14 +171,14 @@ function determineStatus() {
     player2StatusElement.textContent = 'Draw';
     dealerStatusElement.textContent = 'Draw';
     dealerDraws++;
-  } else if (player1Total > dealerTotal && player1Total <= 21) {
+  } else if ((player1Total > dealerTotal && player1Total <= 21) || (isBust(player2Hand) && !isBust(player1Hand))) {
     player1StatusElement.textContent = 'Win';
     player2StatusElement.textContent = 'Lose';
     dealerStatusElement.textContent = 'Lose';
     player1Wins++;
     player2Losses++;
     dealerLosses++;
-  } else if (player2Total > dealerTotal && player2Total <= 21) {
+  } else if ((player2Total > dealerTotal && player2Total <= 21) || (isBust(player1Hand) && !isBust(player2Hand))) {
     player1StatusElement.textContent = 'Lose';
     player2StatusElement.textContent = 'Win';
     dealerStatusElement.textContent = 'Lose';
@@ -201,7 +201,6 @@ function determineStatus() {
 
   updateScoreboard();
 }
-
 
 // Update scoreboard
 function updateScoreboard() {
@@ -278,16 +277,18 @@ function player2Hit() {
 
 // Handle Hit button click for Dealer
 function dealerHit() {
-  const card = dealCard(dealerHand);
+  if (player1Stood && player2Stood) {
+    const card = dealCard(dealerHand);
 
-  if (isBust(dealerHand)) {
-    disableButtons();
-    dealerStood = true;
-    checkStatus();
+    if (isBust(dealerHand)) {
+      disableButtons();
+      dealerStood = true;
+      checkStatus();
+    }
+
+    updateUI();
+    displayTotal();
   }
-
-  updateUI();
-  displayTotal();
 }
 
 // Handle Stand button click for Player 1
@@ -343,8 +344,7 @@ dealBtn.addEventListener('click', function () {
   dealInitialCards();
   dealBtn.disabled = true;
 });
-hitBtn.removeEventListener('click', dealerHit);
-hitBtn.addEventListener('click', player1Hit);
+hitBtn.addEventListener('click', dealerHit);
 p1HitBtn.addEventListener('click', player1Hit);
 p2HitBtn.addEventListener('click', player2Hit);
 dealerStandBtn.addEventListener('click', dealerStand);
