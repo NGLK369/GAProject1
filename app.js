@@ -119,15 +119,16 @@ function updateUI() {
   player2CardsElement.textContent = formatCards(player2Hand);
 }
 
-// Format cards with indicators
-function formatCards(hand) {
+function formatCards(hand, hideFirstCard = false) {
   let formattedCards = '';
 
   for (let i = 0; i < hand.length; i++) {
     const card = hand[i];
 
-    if (hand === dealerHand && !dealerStood) {
+    if (hand === dealerHand && i === 0 && hideFirstCard) {
       formattedCards += '?';
+    } else if (hand === dealerHand) {
+      formattedCards += 'D: ';
     } else if (hand === player1Hand) {
       formattedCards += 'P1: ';
     } else if (hand === player2Hand) {
@@ -139,6 +140,7 @@ function formatCards(hand) {
 
   return formattedCards.slice(0, -2); // Remove trailing comma and space
 }
+
 
 // Calculate total value of a hand
 function calculateTotal(hand) {
