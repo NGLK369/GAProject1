@@ -171,24 +171,19 @@ function determineStatus() {
     player2StatusElement.textContent = 'Draw';
     dealerStatusElement.textContent = 'Draw';
     dealerDraws++;
-  } else if ((player1Total > dealerTotal && player1Total <= 21) || (isBust(player2Hand) && !isBust(player1Hand))) {
+  } else if (player1Total <= 21 && (player1Total > dealerTotal || isBust(dealerHand))) {
     player1StatusElement.textContent = 'Win';
     player2StatusElement.textContent = 'Lose';
     dealerStatusElement.textContent = 'Lose';
     player1Wins++;
     player2Losses++;
     dealerLosses++;
-  } else if ((player2Total > dealerTotal && player2Total <= 21) || (isBust(player1Hand) && !isBust(player2Hand))) {
+  } else if (player2Total <= 21 && (player2Total > dealerTotal || isBust(dealerHand))) {
     player1StatusElement.textContent = 'Lose';
     player2StatusElement.textContent = 'Win';
     dealerStatusElement.textContent = 'Lose';
     player1Losses++;
     player2Wins++;
-    dealerLosses++;
-  } else if (dealerTotal > 21) {
-    player1StatusElement.textContent = 'Win';
-    player2StatusElement.textContent = 'Win';
-    dealerStatusElement.textContent = 'Bust';
     dealerLosses++;
   } else {
     player1StatusElement.textContent = 'Lose';
