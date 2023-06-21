@@ -173,12 +173,16 @@ function determineStatus() {
     dealerDraws++;
   } else if (player1Total > dealerTotal && player1Total <= 21) {
     player1StatusElement.textContent = 'Win';
+    player2StatusElement.textContent = 'Lose';
     dealerStatusElement.textContent = 'Lose';
     player1Wins++;
+    player2Losses++;
     dealerLosses++;
   } else if (player2Total > dealerTotal && player2Total <= 21) {
+    player1StatusElement.textContent = 'Lose';
     player2StatusElement.textContent = 'Win';
     dealerStatusElement.textContent = 'Lose';
+    player1Losses++;
     player2Wins++;
     dealerLosses++;
   } else if (dealerTotal > 21) {
@@ -197,6 +201,7 @@ function determineStatus() {
 
   updateScoreboard();
 }
+
 
 // Update scoreboard
 function updateScoreboard() {
@@ -338,8 +343,8 @@ dealBtn.addEventListener('click', function () {
   dealInitialCards();
   dealBtn.disabled = true;
 });
-hitBtn.removeEventListener('click', player1Hit);
-hitBtn.addEventListener('click', dealerHit);
+hitBtn.removeEventListener('click', dealerHit);
+hitBtn.addEventListener('click', player1Hit);
 p1HitBtn.addEventListener('click', player1Hit);
 p2HitBtn.addEventListener('click', player2Hit);
 dealerStandBtn.addEventListener('click', dealerStand);
