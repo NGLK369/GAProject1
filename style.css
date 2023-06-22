@@ -58,7 +58,6 @@ body {
   font-size: 24px; /* Adjust the font size as desired */
 }
 
-/* Rest of the CSS code... */
 
 button {
   margin: 10px;
@@ -144,3 +143,10 @@ h1 span.red {
   color: red;
 }
 
+#scoreboard {
+  font-size: 18px 
+}
+
+#scoreboard label {
+  font-size: 18px 
+}
