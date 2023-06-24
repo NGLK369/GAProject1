@@ -82,8 +82,8 @@ function enablePlayerButtons() {
 
 // Deal a card
 function dealCard(hand) {
-  const cardIndex = Math.floor(Math.random() * deck.length);
-  const card = deck.splice(cardIndex, 1)[0];
+  const cardIndex = Math.floor(Math.random() * deck.length); //generates a random index within the range of the remaining cards
+  const card = deck.splice(cardIndex, 1)[0]; //remove one card at the specified index and returns an array containing the removed card
   hand.push(card);
   return card;
 }
@@ -96,7 +96,7 @@ function calculateHandValue(hand) {
   for (let i = 0; i < hand.length; i++) {
     const card = hand[i];
     const value = VALUES[card];
-    sum += value;
+    sum += value; //add up additional card to the current value
 
     if (card.endsWith('\u2665') || card.endsWith('\u2666') || card.endsWith('\u2663') || card.endsWith('\u2660')) {
       numAces++;
@@ -106,7 +106,7 @@ function calculateHandValue(hand) {
   // Adjust for aces
   while (sum > 21 && numAces > 0) {
     sum -= 10;
-    numAces--;
+    numAces--; //keep tracck balance A
   }
 
   return sum;
@@ -243,8 +243,6 @@ function determineStatus() {
   updateScoreboard();
 }
 
-
-
 // Update scoreboard
 function updateScoreboard() {
   document.querySelector('#dealerWins').textContent = dealerWins;
@@ -280,6 +278,16 @@ function dealInitialCards() {
 
   updateUI();
   displayTotal();
+
+  const player1Total = calculateHandValue(player1Hand);
+  
+  if (player1Total > 21) {
+    p1HitBtn.disabled = true; // Disable Player 1 hit button
+    p1StandBtn.disabled = true; // Disable Player 1 stand button
+    disableButtons(); // Disable other buttons
+    player1Stood = true;
+    checkStatus();
+  }
 }
 
 // Check the status of the game
@@ -292,30 +300,69 @@ function checkStatus() {
 
 // Handle Hit button click for Player 1
 function player1Hit() {
-  const card = dealCard(player1Hand);
+  if (player1Stood || isBust(player1Hand)) return; // Ignore if player 1 has already stood or is bust
 
-  if (isBust(player1Hand)) {
-    disableButtons();
-    player1Stood = true;
-    checkStatus();
-  }
+  const card = dealCard(player1Hand);
 
   updateUI();
   displayTotal();
+
+  const player1Total = calculateHandValue(player1Hand);
+
+  if (player1Total >= 21) {
+    p1HitBtn.disabled = true; // Disable Player 1 hit button
+    p1StandBtn.disabled = true; // Disable Player 1 stand button
+  }
+
+  if (isBust(player1Hand)) {
+    disableButtons(); // Disable all buttons
+    player1Stood = true;
+    checkStatus();
+  }
+}
+
+// Handle Hit button click for Player 2
+function player2Hit() {
+  if (player2Stood || isBust(player2Hand)) return; // Ignore if player 2 has already stood or is bust
+
+  const card = dealCard(player2Hand);
+
+  updateUI();
+  displayTotal();
+
+  const player2Total = calculateHandValue(player2Hand);
+
+  if (player2Total >= 21) {
+    p2HitBtn.disabled = true; // Disable Player 2 hit button
+    p2StandBtn.disabled = true; // Disable Player 2 stand button
+  }
+
+  if (isBust(player2Hand)) {
+    disableButtons(); // Disable all buttons
+    player2Stood = true;
+    checkStatus();
+  }
 }
 
 // Handle Hit button click for Player 2
 function player2Hit() {
   const card = dealCard(player2Hand);
 
-  if (isBust(player2Hand)) {
-    disableButtons();
+  updateUI();
+  displayTotal();
+
+  const player2Total = calculateHandValue(player2Hand);
+
+  if (player2Total >= 21) {
+    p2HitBtn.disabled = true; // Disable Player 2 hit button
+    p2StandBtn.disabled = true; // Disable Player 2 stand button
+  }
+
+  if (player2Total > 21) {
+    disableButtons(); // Disable other buttons
     player2Stood = true;
     checkStatus();
   }
-
-  updateUI();
-  displayTotal();
 }
 
 // Handle Hit button click for Dealer
@@ -323,14 +370,18 @@ function dealerHit() {
   if (player1Stood && player2Stood) {
     const card = dealCard(dealerHand);
 
-    if (isBust(dealerHand)) {
-      disableButtons();
+    updateUI();
+    displayTotal();
+
+    const dealerTotal = calculateHandValue(dealerHand);
+
+    if (dealerTotal >= 22) {
+      dealerStandBtn.disabled = true; // Disable Dealer stand button
+      hitBtn.disabled = true; // Disable Hit button
+      disableButtons(); // Disable other buttons
       dealerStood = true;
       checkStatus();
     }
-
-    updateUI();
-    displayTotal();
   }
 }
 
@@ -387,9 +438,10 @@ dealBtn.addEventListener('click', function () {
   dealInitialCards();
   dealBtn.disabled = true;
 });
-hitBtn.addEventListener('click', dealerHit);
 p1HitBtn.addEventListener('click', player1Hit);
 p2HitBtn.addEventListener('click', player2Hit);
+hitBtn.addEventListener('click', dealerHit);
+
 dealerStandBtn.addEventListener('click', dealerStand);
 nextBtn.addEventListener('click', nextGame);
 p1StandBtn.addEventListener('click', player1Stand);
@@ -398,5 +450,5 @@ p2StandBtn.addEventListener('click', player2Stand);
 // Initialize the deck
 deck = [...DECK];
 
-// Disable buttons initially
+// Disable buttons until game start
 disableButtons();
